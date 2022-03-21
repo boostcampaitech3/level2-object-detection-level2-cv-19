@@ -9,4 +9,5 @@
 <a href="https://black.readthedocs.io/en/stable/"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-black.svg?style=for-the-badge&labelColor=gray"></a>
 
 세부 설명
-<a href="https://github.com/KimDaeYu/pytorch-template_v2">https://github.com/KimDaeYu/pytorch-template_v2</a>
+<a href="https://github.com/ashleve/lightning-hydra-template">https://github.com/ashleve/lightning-hydra-template</a>
+</div>
