@@ -5,17 +5,23 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
 from torchvision.datasets import MNIST
 from torchvision.transforms import transforms
-from pycocotools.coco import COCO
-from pycocotools.cocoeval import COCOeval
-import cv2
-import numpy as np
-import os
 
-from src.datamodules.components.mask import MaskBaseDataset
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
 
+from src.datamodules.components.recycle import RecycleDataset
 
+def get_train_transform():
+    return A.Compose([
+        A.Resize(1024, 1024),
+        A.Flip(p=0.5),
+        ToTensorV2(p=1.0)
+    ], bbox_params={'format': 'pascal_voc', 'label_fields': ['labels']})
+    
+def collate_fn(batch):
+    return tuple(zip(*batch))
 
-class MASKDataModule(LightningDataModule):
+class RecycleDataModule(LightningDataModule):
     """
     Example of LightningDataModule for MNIST dataset.
 
@@ -36,7 +42,7 @@ class MASKDataModule(LightningDataModule):
     def __init__(
         self,
         data_dir: str = "data/",
-        train_val_test_split: Tuple[int, int, int] = (16_000, 1_600, 3_200),
+        train_val_test_split: Tuple[int, int, int] = (55_000, 5_000, 10_000),
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
@@ -47,9 +53,7 @@ class MASKDataModule(LightningDataModule):
         self.save_hyperparameters(logger=False)
 
         # data transformations
-        self.transforms = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
-        )
+        self.transforms = get_train_transform()
 
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
@@ -57,13 +61,13 @@ class MASKDataModule(LightningDataModule):
 
     @property
     def num_classes(self) -> int:
-        return 18
+        return 10
 
     def prepare_data(self):
         """Download data if needed. This method is called only from a single GPU.
         Do not use it to assign state (self.x = y)."""
-        # MNIST(self.hparams.data_dir, train=True, download=True)
-        # MNIST(self.hparams.data_dir, train=False, download=True)
+        MNIST(self.hparams.data_dir, train=True, download=True)
+        MNIST(self.hparams.data_dir, train=False, download=True)
 
     def setup(self, stage: Optional[str] = None):
         """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
@@ -72,7 +76,7 @@ class MASKDataModule(LightningDataModule):
 
         # load datasets only if they're not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
-            dataset = MaskBaseDataset(self.hparams.data_dir, transform=self.transforms)
+            dataset = RecycleDataset(self.hparams.data_dir + "/train.json", self.hparams.data_dir, get_train_transform()) 
             self.data_train, self.data_val, self.data_test = random_split(
                 dataset=dataset,
                 lengths=self.hparams.train_val_test_split,
@@ -86,6 +90,7 @@ class MASKDataModule(LightningDataModule):
             num_workers=self.hparams.num_workers,
             pin_memory=self.hparams.pin_memory,
             shuffle=True,
+            collate_fn=collate_fn
         )
 
     def val_dataloader(self):
@@ -95,6 +100,7 @@ class MASKDataModule(LightningDataModule):
             num_workers=self.hparams.num_workers,
             pin_memory=self.hparams.pin_memory,
             shuffle=False,
+            collate_fn=collate_fn
         )
 
     def test_dataloader(self):
@@ -104,4 +110,5 @@ class MASKDataModule(LightningDataModule):
             num_workers=self.hparams.num_workers,
             pin_memory=self.hparams.pin_memory,
             shuffle=False,
+            collate_fn=collate_fn
         )
