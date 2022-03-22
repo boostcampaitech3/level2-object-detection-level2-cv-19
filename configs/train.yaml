@@ -3,8 +3,8 @@
 # specify here default training configuration
 defaults:
   - _self_
-  - datamodule: mask.yaml
-  - model: mask.yaml
+  - datamodule: Trash.yaml
+  - model: Trash.yaml
   - callbacks: default.yaml
   - logger: wandb.yaml # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
   - trainer: default.yaml
@@ -35,7 +35,8 @@ defaults:
 original_work_dir: ${hydra:runtime.cwd}
 
 # path to folder with data
-data_dir: ${original_work_dir}/data/Mask/train/images/
+data_dir: '../../../detection/dataset'
+#${original_work_dir}/data/Mask/train/images/
 
 # pretty print config at the start of the run using Rich library
 print_config: True
@@ -55,4 +56,4 @@ seed: null
 
 # default name for the experiment, determines logging folder path
 # (you can overwrite this name in experiment configs)
-name: "mnist"
+name: "Trash_test"
