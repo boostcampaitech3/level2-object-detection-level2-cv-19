@@ -1,0 +1,7 @@
+_target_: src.datamodules.Trash_datamodule.TrashDataModule
+
+data_dir: ${data_dir} # data_dir is specified in config.yaml
+batch_size: 32
+train_val_test_split: [3418, 489, 976]
+num_workers: 0
+pin_memory: False

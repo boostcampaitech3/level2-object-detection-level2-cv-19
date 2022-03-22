@@ -5,59 +5,55 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
 from torchvision.datasets import MNIST
 from torchvision.transforms import transforms
+
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
-import cv2
 import numpy as np
+import cv2
 import os
 
-from src.datamodules.components.mask import MaskBaseDataset
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+
+from src.datamodules.components.Trash import TrashBaseDataset
 
 
+def get_train_transform():
+    return A.Compose([
+        A.Resize(1024, 1024),
+        A.Flip(p=0.5),
+        ToTensorV2(p=1.0)
+    ], bbox_params={'format': 'pascal_voc', 'label_fields': ['labels']})
 
-class MASKDataModule(LightningDataModule):
-    """
-    Example of LightningDataModule for MNIST dataset.
 
-    A DataModule implements 5 key methods:
-        - prepare_data (things to do on 1 GPU/TPU, not on every GPU/TPU in distributed mode)
-        - setup (things to do on every accelerator in distributed mode)
-        - train_dataloader (the training dataloader)
-        - val_dataloader (the validation dataloader(s))
-        - test_dataloader (the test dataloader(s))
+class TrashDataModule(LightningDataModule):
 
-    This allows you to share a full dataset without explaining how to download,
-    split, transform and process the data.
-
-    Read the docs:
-        https://pytorch-lightning.readthedocs.io/en/latest/extensions/datamodules.html
-    """
 
     def __init__(
         self,
-        data_dir: str = "data/",
-        train_val_test_split: Tuple[int, int, int] = (16_000, 1_600, 3_200),
+        annotation : str = '../../../detection/dataset/train.json',
+        data_dir : str = '../../../detection/dataset',
+        train_val_test_split : Tuple[int, int, int] = (16_000, 1_600, 3_200),
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
+        transform = get_train_transform()
     ):
         super().__init__()
 
-        # this line allows to access init params with 'self.hparams' attribute
         self.save_hyperparameters(logger=False)
 
-        # data transformations
-        self.transforms = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
-        )
 
+        self.transforms = transforms
+        
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
         self.data_test: Optional[Dataset] = None
 
+    
     @property
     def num_classes(self) -> int:
-        return 18
+        return 10
 
     def prepare_data(self):
         """Download data if needed. This method is called only from a single GPU.
@@ -72,13 +68,15 @@ class MASKDataModule(LightningDataModule):
 
         # load datasets only if they're not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
-            dataset = MaskBaseDataset(self.hparams.data_dir, transform=self.transforms)
+            #print(self.hparams.data_dir)
+            dataset = TrashBaseDataset()
+            #print(len(dataset))
             self.data_train, self.data_val, self.data_test = random_split(
                 dataset=dataset,
                 lengths=self.hparams.train_val_test_split,
                 generator=torch.Generator().manual_seed(42),
             )
-
+    
     def train_dataloader(self):
         return DataLoader(
             dataset=self.data_train,
@@ -105,3 +103,7 @@ class MASKDataModule(LightningDataModule):
             pin_memory=self.hparams.pin_memory,
             shuffle=False,
         )
+
+    
+
+

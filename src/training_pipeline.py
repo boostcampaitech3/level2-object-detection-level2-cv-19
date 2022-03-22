@@ -83,6 +83,7 @@ def train(config: DictConfig) -> Optional[float]:
     # Train the model
     if config.get("train"):
         log.info("Starting training!")
+        print(datamodule)
         trainer.fit(model=model, datamodule=datamodule)
 
     # Get metric score for hyperparameter optimization
