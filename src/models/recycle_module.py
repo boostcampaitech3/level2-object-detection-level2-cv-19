@@ -111,7 +111,7 @@ class RecycleLitModule(LightningModule):
         ##coco main metric
         #metric = self.coco_evaluator.coco_eval['bbox'].stats[0]
         metric = 0
-        self.log("main_score", metric, on_step=False, on_epoch=True, prog_bar=False)
+        self.log("vaild/main_score", metric, on_step=False, on_epoch=True, prog_bar=False)
         return {}
 
     def test_step(self, batch: Any, batch_idx: int):
@@ -120,11 +120,10 @@ class RecycleLitModule(LightningModule):
         outputs = self.forward(images, targets)
 
         # log test metrics
-        #acc = self.test_acc(preds, targets)
-        self.log("test/loss", loss, on_step=False, on_epoch=True)
-        #self.log("test/acc", acc, on_step=False, on_epoch=True)
+        metric = 0
+        self.log("test/main_score", metric, on_step=False, on_epoch=True, prog_bar=False)
 
-        return {"loss": loss}
+        return {}
 
     def test_epoch_end(self, outputs: List[Any]):
         pass
