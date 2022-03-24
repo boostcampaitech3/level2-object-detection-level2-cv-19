@@ -1,7 +1,0 @@
-_target_: src.models.Trash_module.TrashLitModule
-lr: 0.001
-weight_decay: 0.0005
-
-net:
-  _target_: src.models.components.FastRCNNPredictor.FastRCNN
-  num_classes: 10
