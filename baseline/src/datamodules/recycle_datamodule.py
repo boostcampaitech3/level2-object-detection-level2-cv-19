@@ -10,6 +10,7 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
 from src.datamodules.components.recycle import RecycleDataset
+from src.datamodules.components.recycle_inference import RecycleDataset_inference
 
 def get_train_transform():
     return A.Compose([
@@ -77,11 +78,12 @@ class RecycleDataModule(LightningDataModule):
         # load datasets only if they're not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
             dataset = RecycleDataset(self.hparams.data_dir + "/train.json", self.hparams.data_dir, get_train_transform()) 
-            self.data_train, self.data_val, self.data_test = random_split(
+            self.data_train, self.data_val = random_split(
                 dataset=dataset,
                 lengths=self.hparams.train_val_test_split,
                 generator=torch.Generator().manual_seed(42),
             )
+            self.data_test = RecycleDataset_inference(self.hparams.data_dir + "/test.json", self.hparams.data_dir)
 
     def train_dataloader(self):
         return DataLoader(
@@ -110,5 +112,4 @@ class RecycleDataModule(LightningDataModule):
             num_workers=self.hparams.num_workers,
             pin_memory=self.hparams.pin_memory,
             shuffle=False,
-            collate_fn=collate_fn
         )

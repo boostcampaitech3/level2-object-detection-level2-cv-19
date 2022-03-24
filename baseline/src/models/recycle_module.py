@@ -7,6 +7,9 @@ from torchmetrics.classification.accuracy import Accuracy
 
 from src.models.components.FastRCNN import FastRCNN
 
+from pycocotools.coco import COCO
+import pandas as pd
+
 class Averager:
     def __init__(self):
         self.current_total = 0.0
@@ -72,6 +75,8 @@ class RecycleLitModule(LightningModule):
         # for logging best so far validation accuracy
         self.val_acc_best = MaxMetric()
 
+        self.outputs = []
+
     def forward(self, images, targets):
         return self.net.forward(images, targets)
 
@@ -115,18 +120,37 @@ class RecycleLitModule(LightningModule):
         return {}
 
     def test_step(self, batch: Any, batch_idx: int):
-        images, targets, image_ids = batch
-        targets = [{k: v for k, v in t.items()} for t in targets]
-        outputs = self.forward(images, targets)
-
-        # log test metrics
-        metric = 0
-        self.log("test/main_score", metric, on_step=False, on_epoch=True, prog_bar=False)
-
+        images = list(image for image in batch)
+        output = self.net.pretrain_model(images)
+        for out in output:
+            self.outputs.append({'boxes': out['boxes'].tolist(), 'scores': out['scores'].tolist(), 'labels': out['labels'].tolist()})
         return {}
 
     def test_epoch_end(self, outputs: List[Any]):
-        pass
+        prediction_strings = []
+        file_names = []
+        score_threshold = 0.05
+        coco = COCO("/opt/ml/detection/dataset/test.json")
+        
+        # submission 파일 생성
+        for i, output in enumerate(self.outputs):
+            prediction_string = ''
+            
+            image_info = coco.loadImgs(coco.getImgIds(imgIds=i))[0]
+            for box, score, label in zip(output['boxes'], output['scores'], output['labels']):
+                if score > score_threshold: 
+                    # label[1~10] -> label[0~9]
+                    prediction_string += str(label-1) + ' ' + str(score) + ' ' + str(box[0]) + ' ' + str(
+                        box[1]) + ' ' + str(box[2]) + ' ' + str(box[3]) + ' '
+            prediction_strings.append(prediction_string)
+            file_names.append(image_info['file_name'])
+
+        submission = pd.DataFrame()
+        submission['PredictionString'] = prediction_strings
+        submission['image_id'] = file_names
+        submission.to_csv('/opt/ml/baseline/faster_rcnn/4.csv', index=None)
+        print(submission.head())
+
 
     def on_epoch_end(self):
         # reset metrics at the end of every epoch
