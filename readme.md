@@ -4,3 +4,5 @@
 ---
 ### yolov5 wandb 활성화 하는 방법
 termial에서 yolo5폴더 들어가서 wandb online 실행
+
+python train.py --entity next_level --batch 16 --epochs 30 --data trash.yaml --weights yolov5s.pt 
