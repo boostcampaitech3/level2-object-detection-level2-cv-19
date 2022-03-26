@@ -1,2 +1,4 @@
 dataset/images/test
 dataset/images/train
+dataset/split_train
+dataset/split_vaild
