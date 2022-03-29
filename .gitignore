@@ -257,7 +257,11 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+
 dataset/images/test
 dataset/images/train
 dataset/split_train
 dataset/split_vaild
+dataset/dataset_folds_*
+*.cache

@@ -1,0 +1,3 @@
+{names: [General trash, Paper, Paper pack, Metal, Glass, Plastic, Styrofoam, Plastic
+      bag, Battery, Clothing], nc: 10, train: ../dataset/dataset_folds_1/images/train,
+  val: ../dataset/dataset_folds_1/images/valid}
