@@ -11,7 +11,7 @@
 path: /opt/ml/detection/dataset/trash # dataset root dir
 train: split_train
 val: split_vaild  
-test: images/test  
+test: test  
 
 
 # Classes
