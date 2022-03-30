@@ -265,3 +265,4 @@ dataset/split_train
 dataset/split_vaild
 dataset/dataset_folds_*
 *.cache
+DATAResearch/inference/*.csv
