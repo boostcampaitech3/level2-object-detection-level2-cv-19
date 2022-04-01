@@ -2,8 +2,9 @@ import pandas as pd
 import json
 
 #settings!!#
-csv_file_name = "2.csv"
-json_file_name = "csv_to_json2.json"
+csv_file_name = "submission.csv"
+json_file_name = "full_train_coco.json"
+dataset = "train"
 
 pred_df = pd.read_csv(csv_file_name)
 
@@ -93,15 +94,27 @@ if __name__ == "__main__":
     bboxes = pred_df['PredictionString'].values.tolist()
 
     for f in file_names:
-        dic["images"].append({
-            "width": 1024,
-            "height": 1024,
-            "file_name": f,
-            "license": 0,
-            "flickr_url": None,
-            "coco_url": None,
-            "id": int(f[5:9])
-        })
+        if(dataset == "test"):
+            dic["images"].append({
+                "width": 1024,
+                "height": 1024,
+                "file_name": f,
+                "license": 0,
+                "flickr_url": None,
+                "coco_url": None,
+                "id": int(f[5:9])
+            })
+        else:
+            dic["images"].append({
+                "width": 1024,
+                "height": 1024,
+                "file_name": f,
+                "license": 0,
+                "flickr_url": None,
+                "coco_url": None,
+                "id": int(f[6:10])
+            })
+
 
 
     box_id = 0
