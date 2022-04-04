@@ -8,9 +8,9 @@
 
 
 # Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
-path: /opt/ml/baseline/level2-object-detection-level2-cv-19/dataset/  # dataset root dir
-train: images/train
-val: split_vaild
+path: /opt/ml/baseline/level2-object-detection-level2-cv-19/dataset  # dataset root dir
+train: split_train
+val: split_vaild  
 test: images/test  
 
 # Classes
