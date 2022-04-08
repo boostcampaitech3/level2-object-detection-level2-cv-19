@@ -1,8 +1,7 @@
 # Object-detection-level2-cv-19
-## 🔍 Overview
----
+### 🔍 Overview
 #### Background
-![image1](./mmdetection/tools/images/image1.png)
+![image1]('./mmdetection/tools/images/image1.png')
 
 #### Dataset
 * 전체 이미지 개수: 9754장 (Train 4883장, Test 4871장)
@@ -19,7 +18,6 @@
 <br />
 
 ## 📝 Members
----
 - `권혁산` &nbsp; WarpUp 리포트에 
 - `김대유` &nbsp; 프로젝트 팀   
 - `김찬민` &nbsp; 구성 및 역할  
@@ -29,7 +27,6 @@
 <br />
 
 ## 📃 Code Structure
----
 ```
 .
 ├── yolov5
@@ -61,7 +58,6 @@
 <br />
 
 ## 💻 How to use
----
 #### mmdetection
 ```
 cd mmdetection
