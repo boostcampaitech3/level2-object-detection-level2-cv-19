@@ -1,7 +1,0 @@
-_target_: src.datamodules.recycle_datamodule.RecycleDataModule
-
-data_dir: ${data_dir} # data_dir is specified in config.yaml
-batch_size: 32
-train_val_test_split: [3906, 977]
-num_workers: 0
-pin_memory: False

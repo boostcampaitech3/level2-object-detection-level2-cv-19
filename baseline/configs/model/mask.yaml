@@ -1,7 +1,0 @@
-_target_: src.models.mask_module.MASKLitModule
-lr: 0.001
-weight_decay: 0.0005
-
-net:
-  _target_: src.models.components.Res18.Res18
-  num_classes: 18

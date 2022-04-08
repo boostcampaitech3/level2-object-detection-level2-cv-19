@@ -1,6 +1,0 @@
-fiftyone
-
-
-# apt-get install curl
-# apt-get install libcurl3
-# apt-get install libcurl4-openssl-dev
