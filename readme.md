@@ -1,7 +1,7 @@
 # Object-detection-level2-cv-19
 ### 🔍 Overview
 #### Background
-![image1]('./mmdetection/tools/images/image1.png')
+![image1](./mmdetection/tools/image_/image1.png)
 
 #### Dataset
 * 전체 이미지 개수: 9754장 (Train 4883장, Test 4871장)
