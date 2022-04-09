@@ -90,6 +90,12 @@ python train.py --entity next_level --batch 16 --epochs 30 --data trash.yaml --w
 
 ```
 
+### Detectron2
+```
+cd Detectron2
+python tools/train_net.py --config-file {Config 파일명}
+```
+
 <br />
 
 ## Evaluation
