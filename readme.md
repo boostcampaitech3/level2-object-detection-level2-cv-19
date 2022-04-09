@@ -45,7 +45,7 @@
 │   ├── detect.py
 │   └── val.py
 ├── mmdetection
-│   ├── train.py
+│   ├── tools
 │   │   └── train.py
 │   └── custom_models
 │       ├── cascade_swin
@@ -81,11 +81,6 @@ python train.py --entity next_level --batch 16 --epochs 30 --data trash.yaml --w
 ```
 
 ### EfficientDet
-```
-
-```
-
-### Faster R-CNN
 ```
 
 ```
