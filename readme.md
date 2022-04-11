@@ -28,11 +28,11 @@
 <br />
 
 ## 📝 Members
-- `권혁산` &nbsp; WarpUp 리포트에 
-- `김대유` &nbsp; 프로젝트 팀   
-- `김찬민` &nbsp; 구성 및 역할  
-- `이상진` &nbsp; 부분 그대로  
-- `정효재` &nbsp; 써주시면 되요  
+- `권혁산` &nbsp; Detection을 위한 라이브러리 서칭, 라이브러리 사용법 및 협업에 대한 의견 제시, DataCleaning, IOU Sweep 
+- `김대유` &nbsp; EDA 및 fiftyone을 이용한 데이터 시각화, 모델 결과 데이터 형식 변경 툴(csv to json), stratified k-fold 데이터 제작   
+- `김찬민` &nbsp; 베이스라인코드 모델 이해 및 학습  
+- `이상진` &nbsp; mmdetection, k-fold 데이터셋, ensemble, multi-scale  
+- `정효재` &nbsp; 모델 학습 및 Augmentation, workspace 생성  
 
 <br />
 
